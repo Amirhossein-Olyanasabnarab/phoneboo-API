@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@DiscriminatorValue("PERSON")
+@DiscriminatorValue("PERSONAL")
 public class PersonalContact extends Contact{
 
     private String nationality;

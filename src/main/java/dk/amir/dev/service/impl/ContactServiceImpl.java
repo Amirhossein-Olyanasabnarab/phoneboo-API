@@ -60,7 +60,6 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<PersonalContactDto> getPersonalContacts() {
-
         return repository.findAll()
                 .stream()
                 .filter(c -> c instanceof  PersonalContact)
