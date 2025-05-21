@@ -13,7 +13,7 @@ public class PersonalContactDto {
     private String fullName;
 
     @NotBlank(message = "Phone is required")
-    @Pattern(regexp = "^\\\\+?[0-9]{7,15}$", message = "Invalid phone number")
+    @Pattern(regexp = "^\\+?[0-9]{7,15}$", message = "Invalid phone number")
     private String phoneNumber;
 
     @Email(message = "Invalid email format")
