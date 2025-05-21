@@ -7,7 +7,6 @@ import dk.amir.dev.model.entity.Contact;
 import dk.amir.dev.model.entity.PersonalContact;
 import dk.amir.dev.repository.ContactRepository;
 import dk.amir.dev.service.ContactService;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,6 +120,16 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public boolean deletePersonalContact(Long id) {
-        return false;
+
+        Contact contact = repository.findById(id)
+                .orElseThrow( () -> new RuntimeException("Contact not found"));
+
+        if (contact.getDeleted()){
+            contact.setDeleted(true);
+            repository.save(contact);
+            return true;
+        }else {
+            return false;
+        }
     }
 }
