@@ -3,9 +3,11 @@ package dk.amir.dev.service.impl;
 import dk.amir.dev.dto.BusinessContactDto;
 import dk.amir.dev.dto.PersonalContactDto;
 import dk.amir.dev.model.entity.BusinessContact;
+import dk.amir.dev.model.entity.Contact;
 import dk.amir.dev.model.entity.PersonalContact;
 import dk.amir.dev.repository.ContactRepository;
 import dk.amir.dev.service.ContactService;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,12 +45,18 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public PersonalContactDto getPersonalContactById(Long id) {
-        return null;
+
+        Contact contact = repository.findById(id).orElse(null);
+        return contact != null ?mapper.map(contact, PersonalContactDto.class) : null;
+
     }
 
     @Override
     public BusinessContactDto getBusinessContactById(Long id) {
-        return null;
+
+        Contact contact = repository.findById(id).orElse(null);
+        return contact != null ? mapper.map(contact, BusinessContactDto.class) : null;
+
     }
 
     @Override
@@ -73,12 +81,42 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public PersonalContactDto updatePersonalContact(Long id, PersonalContactDto dto) {
-        return null;
+        Contact contact = repository.findById(id).orElseThrow( () -> new RuntimeException("Contact not found"));
+
+        if (contact instanceof  PersonalContact){
+            PersonalContact personal = (PersonalContact) contact;
+
+            personal.setFullName(dto.getFullName());
+            personal.setPhoneNumber(dto.getPhoneNumber());
+            personal.setEmail(dto.getEmail());
+            personal.setNationality(dto.getNationality());
+
+            PersonalContact update = repository.save(personal);
+            return mapper.map(update, PersonalContactDto.class);
+        }
+        else {
+            throw new RuntimeException("Not a personal contact");
+        }
     }
 
     @Override
     public BusinessContactDto updateBusinessContact(Long id, BusinessContactDto dto) {
-        return null;
+
+        Contact contact = repository.findById(id)
+                .orElseThrow( () -> new RuntimeException("Contact not found"));
+
+        if(contact instanceof  BusinessContact businessContact){
+
+            businessContact.setFullName(dto.getFullName());
+            businessContact.setPhoneNumber(dto.getPhoneNumber());
+            businessContact.setEmail(dto.getEmail());
+            businessContact.setCompanyName(dto.getCompanyName());
+
+            BusinessContact update = repository.save(businessContact);
+            return mapper.map(update, BusinessContactDto.class);
+        }else {
+            throw new RuntimeException("Not a business contact");
+        }
     }
 
     @Override
