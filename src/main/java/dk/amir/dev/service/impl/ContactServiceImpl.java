@@ -18,117 +18,40 @@ import java.util.stream.Collectors;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository repository;
-    private final ModelMapper mapper;
-
     @Autowired
-    public ContactServiceImpl(ContactRepository repository, ModelMapper mapper) {
+    public ContactServiceImpl(ContactRepository repository) {
         this.repository = repository;
-        this.mapper = mapper;
-    }
-
-
-
-    @Override
-    public PersonalContactDto createPersonalContact(PersonalContactDto dto) {
-
-        PersonalContact contact = mapper.map(dto, PersonalContact.class);
-        return mapper.map(repository.save(contact), PersonalContactDto.class);
     }
 
     @Override
-    public BusinessContactDto createBusinessContact(BusinessContactDto dto) {
-
-        BusinessContact contact = mapper.map(dto, BusinessContact.class);
-        return mapper.map(repository.save(contact), BusinessContactDto.class);
+    public Contact addContact(Contact contact) {
+        return repository.save(contact);
     }
 
     @Override
-    public PersonalContactDto getPersonalContactById(Long id) {
-
-        Contact contact = repository.findById(id).orElse(null);
-        return contact != null ?mapper.map(contact, PersonalContactDto.class) : null;
-
+    public Contact updateContact(Long id, Contact updatedContact) {
+        Contact contact = repository.findById(id).get();
+        contact.setFullName(updatedContact.getFullName());
+        contact.setEmail(updatedContact.getEmail());
+        contact.setPhoneNumber(updatedContact.getPhoneNumber());
+        return repository.save(contact);
     }
 
     @Override
-    public BusinessContactDto getBusinessContactById(Long id) {
-
-        Contact contact = repository.findById(id).orElse(null);
-        return contact != null ? mapper.map(contact, BusinessContactDto.class) : null;
-
+    public boolean deleteContact(Long id) {
+        Contact contact = repository.findById(id).get();
+        contact.setDeleted(true);
+        repository.save(contact);
+        return true;
     }
 
     @Override
-    public List<PersonalContactDto> getPersonalContacts() {
-        return repository.findAll()
-                .stream()
-                .filter(c -> c instanceof  PersonalContact)
-                .map(c -> mapper.map(c, PersonalContactDto.class))
-                .collect(Collectors.toList());
+    public List<Contact> getAllContacts() {
+        return repository.findAll();
     }
 
     @Override
-    public List<BusinessContactDto> getBusinessContacts() {
-
-        return repository.findAll()
-                .stream()
-                .filter(c -> c instanceof BusinessContact)
-                .map(c -> mapper.map(c, BusinessContactDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public PersonalContactDto updatePersonalContact(Long id, PersonalContactDto dto) {
-        Contact contact = repository.findById(id).orElseThrow( () -> new RuntimeException("Contact not found"));
-
-        if (contact instanceof  PersonalContact){
-            PersonalContact personal = (PersonalContact) contact;
-
-            personal.setFullName(dto.getFullName());
-            personal.setPhoneNumber(dto.getPhoneNumber());
-            personal.setEmail(dto.getEmail());
-            personal.setNationality(dto.getNationality());
-
-            PersonalContact update = repository.save(personal);
-            return mapper.map(update, PersonalContactDto.class);
-        }
-        else {
-            throw new RuntimeException("Not a personal contact");
-        }
-    }
-
-    @Override
-    public BusinessContactDto updateBusinessContact(Long id, BusinessContactDto dto) {
-
-        Contact contact = repository.findById(id)
-                .orElseThrow( () -> new RuntimeException("Contact not found"));
-
-        if(contact instanceof  BusinessContact businessContact){
-
-            businessContact.setFullName(dto.getFullName());
-            businessContact.setPhoneNumber(dto.getPhoneNumber());
-            businessContact.setEmail(dto.getEmail());
-            businessContact.setCompanyName(dto.getCompanyName());
-
-            BusinessContact update = repository.save(businessContact);
-            return mapper.map(update, BusinessContactDto.class);
-        }else {
-            throw new RuntimeException("Not a business contact");
-        }
-    }
-
-    @Override
-    public boolean deletePersonalContact(Long id) {
-
-        Contact contact = repository.findById(id)
-                .orElseThrow( () -> new RuntimeException("Contact not found"));
-
-        if (contact.getDeleted()){
-            contact.setDeleted(true);
-            repository.save(contact);
-            return true;
-        }else {
-            return false;
-        }
+    public Contact getContactById(Long id) {
+        return repository.findById(id).get();
     }
 }
