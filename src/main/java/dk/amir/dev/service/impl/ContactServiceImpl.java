@@ -1,18 +1,16 @@
 package dk.amir.dev.service.impl;
 
-import dk.amir.dev.dto.BusinessContactDto;
-import dk.amir.dev.dto.PersonalContactDto;
-import dk.amir.dev.model.entity.BusinessContact;
+
 import dk.amir.dev.model.entity.Contact;
-import dk.amir.dev.model.entity.PersonalContact;
+
 import dk.amir.dev.dao.repository.ContactRepository;
 import dk.amir.dev.service.ContactService;
-import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class ContactServiceImpl implements ContactService {

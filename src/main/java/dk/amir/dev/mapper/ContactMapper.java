@@ -10,6 +10,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ContactMapper {
+
     PersonalContact toEntity(PersonalContactDto dto);
     PersonalContactDto toDto(PersonalContact entity);
 
