@@ -1,9 +1,14 @@
-package dk.amir.dev.model.entity;
+package dk.amir.dev.dto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dk.amir.dev.model.entity.BusinessContact;
+import dk.amir.dev.model.entity.PersonalContact;
 import dk.amir.dev.model.enums.ContactType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,15 +21,12 @@ import lombok.experimental.SuperBuilder;
         @JsonSubTypes.Type(value = BusinessContact.class, name = "BUSINESS"),
 })
 
-@Entity
 @Getter
 @Setter
 @SuperBuilder
-@NoArgsConstructor
 @AllArgsConstructor
-
-public abstract class Contact {
-
+@NoArgsConstructor
+public abstract class ContactDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
