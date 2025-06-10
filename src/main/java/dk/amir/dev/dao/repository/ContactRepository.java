@@ -1,4 +1,4 @@
-package dk.amir.dev.repository;
+package dk.amir.dev.dao.repository;
 
 import dk.amir.dev.model.entity.Contact;
 import dk.amir.dev.model.enums.ContactType;

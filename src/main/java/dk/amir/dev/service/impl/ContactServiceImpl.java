@@ -5,7 +5,7 @@ import dk.amir.dev.dto.PersonalContactDto;
 import dk.amir.dev.model.entity.BusinessContact;
 import dk.amir.dev.model.entity.Contact;
 import dk.amir.dev.model.entity.PersonalContact;
-import dk.amir.dev.repository.ContactRepository;
+import dk.amir.dev.dao.repository.ContactRepository;
 import dk.amir.dev.service.ContactService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
